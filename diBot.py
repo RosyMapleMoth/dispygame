@@ -10,10 +10,14 @@ import time
 class area():
     def __init__(self):
         self.areaName = '???'
-        self.areaDescription = '''in the abyss of nothingness you are all, and all is you.
+        self.playersInArea = None
+        self.areaDescription = ''' \n
+an abyss of nothingness surrounds you, pure nothingness.
 
 And yet...
+
 You can\'t seem to shake the feeling that you are not alone'''
+        
 
 class player():
     def __init__(self):
@@ -51,9 +55,10 @@ async def on_message(message):
 
     elif message.content.lower().startswith('!checkin'):
         if (message.author.id in PlayerList):
+            print(message.author.id)
+            print(PlayerList.keys())
             await client.send_message(message.channel, 'Hello %s Welcome back' % PlayerList[message.author.id].Username)
-            await client.send_message(message.channel, 'you are in the {name} would you like to look around'.format(
-            PlayerList[message.author.id].Location.areaName))
+            await client.send_message(message.channel, 'you are in the {} would you like to look around'.format(PlayerList[message.author.id].Location.areaName))
 
             def check(msg):
                 return msg.content.startswith('$look around')
