@@ -3,6 +3,7 @@ import asyncio
 import pickle
 import logging
 import time
+import random
 
     
 
@@ -10,13 +11,14 @@ import time
 class area():
     def __init__(self):
         self.areaName = '???'
-        self.playersInArea = None
+        self.playersInArea = []
         self.areaDescription = ''' \n
 An abyss of nothingness surrounds you, pure nothingness.
 
 And yet...
 
 You can\'t seem to shake the feeling that you are not alone...'''
+
         
 
 class player():
@@ -26,6 +28,15 @@ class player():
 
 client = discord.Client()
 PlayerList = {}
+
+
+forest = area()
+forest.areaName ='The great forest'
+forest.areaDescription = ''' it\'s the woods, spooky '''
+void = area()
+
+Areas = [forest, void]
+
 
 @client.event
 async def on_ready():
@@ -62,7 +73,9 @@ async def on_message(message):
 
             def check(msg):
                 return msg.content.startswith('$look around')
+            
             message = await client.wait_for_message(author=message.author, check=check)
+            #if ()
             await client.send_message(message.channel, PlayerList[message.author.id].Location.areaDescription)
             
         else:
@@ -75,7 +88,8 @@ async def on_message(message):
         await client.send_message(message.channel, 'Thank you for joining this project')
         await client.send_message(message.channel, 'To pick a name for your in-game player type $name nameHere')
         PlayerList[message.author.id] = player()
-        PlayerList[message.author.id].Location = area()
+        PlayerList[message.author.id].Location = Areas[0]
+        Areas[0].playersInArea.append(PlayerList[message.author.id])
 
         def check(msg):
             return msg.content.startswith('$name')
