@@ -13,19 +13,12 @@ class area():
         self.areaName = '???'
         self.playersInArea = []
         self.areaDescription = ''' \n
-an abyss of nothingness surrounds you, pure nothingness.
+An abyss of nothingness surrounds you, pure nothingness.
 
 And yet...
 
-You can\'t seem to shake the feeling that you are not alone'''
+You can\'t seem to shake the feeling that you are not alone...'''
 
-
-
-class forest(area):
-    def __init__(self):
-        self.areaName = 'The great '
-        self.playersInArea = []
-        self.areaDescription = ''' it\'s the woods, spooky '''
         
 
 class player():
@@ -75,8 +68,8 @@ async def on_message(message):
         if (message.author.id in PlayerList):
             print(message.author.id)
             print(PlayerList.keys())
-            await client.send_message(message.channel, 'Hello %s Welcome back' % PlayerList[message.author.id].Username)
-            await client.send_message(message.channel, 'you are in the {} would you like to look around'.format(PlayerList[message.author.id].Location.areaName))
+            await client.send_message(message.channel, 'Hello %s, Welcome back.' % PlayerList[message.author.id].Username)
+            await client.send_message(message.channel, 'You are in the {}. Would you like to look around?'.format(PlayerList[message.author.id].Location.areaName))
 
             def check(msg):
                 return msg.content.startswith('$look around')
@@ -87,13 +80,13 @@ async def on_message(message):
             
         else:
             await client.send_message(message.channel,
-                                      'Hello %s Welcome to Discordia this is an interactive text based MMO \n which is currently under production'
+                                      'Hello %s Welcome to Discordia! This is an interactive text based MMO \nwhich is currently under production'
                                       % message.author.name )
-            await client.send_message(message.channel, 'If you would liek to create a profile please type \"!d create profile\" ')
+            await client.send_message(message.channel, 'If you would like to create a profile please type \"!d create profile\" ')
 
     elif message.content.startswith('!d create profile'):
-        await client.send_message(message.channel, 'thank you for joining this projec')
-        await client.send_message(message.channel, 'To pick a name for your in game player type $name nameHere')
+        await client.send_message(message.channel, 'Thank you for joining this project')
+        await client.send_message(message.channel, 'To pick a name for your in-game player type $name nameHere')
         PlayerList[message.author.id] = player()
         PlayerList[message.author.id].Location = Areas[0]
         Areas[0].playersInArea.append(PlayerList[message.author.id])
@@ -105,7 +98,7 @@ async def on_message(message):
         name = message.content[len('$name'):].strip()
 
         PlayerList[message.author.id].Username = name
-        await client.send_message(message.channel, '{} is a good name'.format(name))
+        await client.send_message(message.channel, '{} is a good name!'.format(name))
 
     elif message.content.startswith('!savegame'):
         afile = open('PlayerData', 'wb')
