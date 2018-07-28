@@ -5,7 +5,7 @@ import logging
 import time
 import random
 
-import Forest_hut
+import foresthut
 
     
 
@@ -126,8 +126,8 @@ async def greeter(message):
 
         message = await client.wait_for_message(author = message.author, check = check)
         PlayerList[message.author.id].secret = True
-        Forest_hut.player_enter(message)
-        PlayerList[message.author.id].greet_function = Forest_hut.greeter()
+        foresthut.player_enter(message)
+        PlayerList[message.author.id].greet_function = foresthut.greeter()
         
 client.run('Mjg4OTY2NjI1MjAwMTc3MTUy.DjZkJA.aRmsmA2Yq7AjH5e5VIoqMiG_ftQ')
 
