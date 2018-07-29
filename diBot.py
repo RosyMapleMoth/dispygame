@@ -40,6 +40,7 @@ void = area()
 
 Areas = [forest, void]
 
+commands = {"!look around ":  }
 
 @client.event
 async def on_ready():
@@ -54,15 +55,16 @@ async def on_ready():
 async def on_message(message):
     global PlayerList
 
+    #expiremental command handaling
+    for possableCommand in commands.key:
+        if message.content.lower().startswith(possableCommand)
+        {
+            commands[possableCommand](PlayerList[message.author.id])
+        }
+
+    
     if (message.author.id in PlayerList):
         await PlayerList[message.author.id].greet_function(message)
-    
-    elif message.content.startswith('!test'):
-        counter = 0
-        tmp = await client.send_message(message.channel, 'Calculating messages...')
-        async for log in client.logs_from(message.channel, limit=100):
-            if log.author == message.author:
-                counter += 1
 
         await client.edit_message(tmp, 'You have {} messages.'.format(counter))
     elif message.content.startswith('!sleep'):
@@ -128,6 +130,16 @@ async def greeter(message):
         PlayerList[message.author.id].secret = True
         Forest_hut.player_enter(message)
         PlayerList[message.author.id].greet_function = Forest_hut.greeter()
+
+
+
+async def LookAround(user):
+    await client.send_message(message.channel, 'Hello %s, Welcome back.' % PlayerList[message.author.id].Username)
+
+
+
+
+
         
 client.run('Mjg4OTY2NjI1MjAwMTc3MTUy.DjZkJA.aRmsmA2Yq7AjH5e5VIoqMiG_ftQ')
 
