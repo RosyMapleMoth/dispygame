@@ -4,10 +4,9 @@ import pickle
 import logging
 import time
 import random
-
-import Forest_hut
-
-    
+import json
+import UserCommands
+#import Forest_hut
 
 
 class area():
@@ -20,8 +19,11 @@ An abyss of nothingness surrounds you, pure nothingness.
 And yet...
 
 You can\'t seem to shake the feeling that you are not alone...'''
+        self.ThingsInArea = []
 
-        
+
+with open("Item.json", "r") as read_file:
+    itemIndex = json.load(read_file)
 
 class player():
     def __init__(self):
@@ -33,13 +35,6 @@ class player():
 client = discord.Client()
 PlayerList = {}
 
-forest = area()
-forest.areaName ='The great forest'
-forest.areaDescription = ''' it\'s the woods, spooky '''
-void = area()
-
-Areas = [forest, void]
-
 
 @client.event
 async def on_ready():
@@ -48,60 +43,44 @@ async def on_ready():
     print(client.user.id)
     print('------')
     print(PlayerList)
-    
+    print(itemIndex)
+    print("update {}")
 
 @client.event
 async def on_message(message):
+    
     global PlayerList
+    confused = True
 
-    if (message.author.id in PlayerList):
-        await PlayerList[message.author.id].greet_function(message)
-    
-    elif message.content.startswith('!test'):
-        counter = 0
-        tmp = await client.send_message(message.channel, 'Calculating messages...')
-        async for log in client.logs_from(message.channel, limit=100):
-            if log.author == message.author:
-                counter += 1
 
-        await client.edit_message(tmp, 'You have {} messages.'.format(counter))
-    elif message.content.startswith('!sleep'):
-        await asyncio.sleep(5)
-        await client.send_message(message.channel, 'Done sleeping')
+    if message.content.startswith('d!test'):
+        print("about to do a thing")
+        await UserCommands.Help(message)
+        print("prossesing message {}".format(message.content))
 
-    elif message.content.lower().startswith('!checkin'):
-        await client.send_message(message.channel,'''
-Hello %s, Welcome to Discordia!
-This is an interactive text based MMO which is currently under production.''' % message.author.name )
-        await client.send_message(message.channel, 'If you would like to create a profile please type \"!d create profile\" ')
+                
+    if message.content.startswith("d!"):
+        print("prossesing message {}".format(message.content))
+        if message.content.startswith("d!new account"):
+            if message.author.id in PlayerList:
+                await client.send_message(message.channel, 'you\'re already in our data base')
+            else:
+                await Help(message)
+        elif message.author.id in PlayerList:
+            for i in coms.commands.keys():
+            
+                if ( message.content.startswith(i) ):
+            
+                    await coms.commands[i](message)
+                    confused = False
+                    break
 
-    elif message.content.startswith('!d create profile'):
-        await client.send_message(message.channel, 'Thank you for joining this project')
-        await client.send_message(message.channel, 'To pick a name for your in-game player type $name nameHere')
-        PlayerList[message.author.id] = player()
-        PlayerList[message.author.id].Location = Areas[0]
-        Areas[0].playersInArea.append(PlayerList[message.author.id])
+            if (confused == True):
+                await client.send_message(message.channel, 'I didn\t understand for a list of commands use !help')
+        else:
+            await client.send_message(message.channel, 'looks like your not in our data base please use !new account and create an account to use this bot')
 
-        def check(msg):
-            return msg.content.startswith('$name')
-        
-        message = await client.wait_for_message(author=message.author, check=check)
-        name = message.content[len('$name'):].strip()
 
-        PlayerList[message.author.id].Username = name
-        await client.send_message(message.channel, '{} is a good name!'.format(name))
-
-    elif message.content.startswith('!savegame'):
-        afile = open('PlayerData', 'wb')
-        pickle.dump(PlayerList, afile)
-        afile.close()
-        
-    elif message.content.startswith('!loadgame'):
-        file2 = open('PlayerData', 'rb')
-        PlayerList = pickle.load(file2)
-        file2.close()
-
-    
 
 async def greeter(message):
     if message.content.lower().startswith('!checkin'):
@@ -115,7 +94,6 @@ async def greeter(message):
             return msg.content.startswith('$look around')
             
         message = await client.wait_for_message(author=message.author, check=check)
-        #if ()
         await client.send_message(message.channel, PlayerList[message.author.id].Location.areaDescription)
 
     elif message.content.startswith('$walk through forest'):
@@ -128,13 +106,8 @@ async def greeter(message):
         PlayerList[message.author.id].secret = True
         Forest_hut.player_enter(message)
         PlayerList[message.author.id].greet_function = Forest_hut.greeter()
-        
+
+
+
 client.run('Mjg4OTY2NjI1MjAwMTc3MTUy.DjZkJA.aRmsmA2Yq7AjH5e5VIoqMiG_ftQ')
 
-
-    
-
-
-    
-    
-    
