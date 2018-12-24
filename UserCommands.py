@@ -58,8 +58,9 @@ async def LoadAndSave(todo):
 
 
 @asyncio.coroutine
-async def offend(channel):
-    await diBot.client.send_message(channel, "Fuck off asshole!")
+async def offend(channel, user):
+    string = "Fuck off, " + user.name + "!"
+    await diBot.client.send_message(channel, string)
 
 @asyncio.coroutine
 async def NewAccount(user):

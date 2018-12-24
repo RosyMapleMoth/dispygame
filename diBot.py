@@ -49,7 +49,7 @@ async def on_ready():
 
 @client.event
 async def on_typing(channel, user, when):
-    await UserCommands.offend(channel)
+    await UserCommands.offend(channel, user)
 
 @client.event
 async def on_message(message):
