@@ -1,12 +1,13 @@
 import discord
 import asyncio
 import pickle
+import logging
 #import diBot
 # this file currently holds all user commands
 
+logging.basicConfig(level=logging.INFO)
 
-
-
+@asyncio.coroutine
 async def CreateAccount(message):
         
     
@@ -42,6 +43,7 @@ async def Help(message):
     print("inside helper")
     await GameError(message, "UnderConstruction")
 
+@asyncio.coroutine
 async def LoadAndSave(todo):
     if (todo == "save"):
         afile = open('PlayerData', 'wb')
@@ -54,6 +56,17 @@ async def LoadAndSave(todo):
     else:
         print("unacceptable state input")
 
+
+@asyncio.coroutine
+async def offend(channel):
+    await diBot.client.send_message(channel, "Fuck off asshole!")
+
+@asyncio.coroutine
+async def NewAccount(user):
+    string = "Thank you for joining the game, " + user.name
+    await diBot.client.send_message(user, string)
+    diBot.PlayerList[user.id] = user.name
+    
 
 import diBot 
 

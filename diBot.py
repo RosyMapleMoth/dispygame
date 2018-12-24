@@ -8,6 +8,7 @@ import json
 import UserCommands
 #import Forest_hut
 
+logging.basicConfig(level=logging.INFO)
 
 class area():
     def __init__(self):
@@ -47,9 +48,13 @@ async def on_ready():
     print("update {}")
 
 @client.event
+async def on_typing(channel, user, when):
+    await UserCommands.offend(channel)
+
+@client.event
 async def on_message(message):
     
-    global PlayerList
+    global PlayerList #PlayerList is a dictionary not a list
     confused = True
 
 
@@ -65,7 +70,7 @@ async def on_message(message):
             if message.author.id in PlayerList:
                 await client.send_message(message.channel, 'you\'re already in our data base')
             else:
-                await Help(message)
+                await UserCommands.NewAccount(message.author)
         elif message.author.id in PlayerList:
             for i in coms.commands.keys():
             
@@ -79,34 +84,6 @@ async def on_message(message):
                 await client.send_message(message.channel, 'I didn\t understand for a list of commands use !help')
         else:
             await client.send_message(message.channel, 'looks like your not in our data base please use !new account and create an account to use this bot')
-
-
-
-async def greeter(message):
-    if message.content.lower().startswith('!checkin'):
-        print(message.author.id)
-        print(PlayerList.keys())
-        await client.send_message(message.channel, 'Hello %s, Welcome back.' % PlayerList[message.author.id].Username)
-        
-        await client.send_message(message.channel, 'You are in the {}. Would you like to look around?'.format(PlayerList[message.author.id].Location.areaName))
-
-        def check(msg):
-            return msg.content.startswith('$look around')
-            
-        message = await client.wait_for_message(author=message.author, check=check)
-        await client.send_message(message.channel, PlayerList[message.author.id].Location.areaDescription)
-
-    elif message.content.startswith('$walk through forest'):
-        await client.send_message(message.channel, 'You walk through the forest, passing by the various life in the forest.')
-
-        def check(msg):
-            return msg.content.startswith('$walk through the dark side')
-
-        message = await client.wait_for_message(author = message.author, check = check)
-        PlayerList[message.author.id].secret = True
-        Forest_hut.player_enter(message)
-        PlayerList[message.author.id].greet_function = Forest_hut.greeter()
-
 
 
 client.run('Mjg4OTY2NjI1MjAwMTc3MTUy.DjZkJA.aRmsmA2Yq7AjH5e5VIoqMiG_ftQ')
