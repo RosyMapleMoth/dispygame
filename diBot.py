@@ -5,10 +5,8 @@ import logging
 import time
 import random
 import json
-#import UserCommands 
-#import Forest_hut
 
-logging.basicConfig(level=logging.INFO)
+
 
 class area():
     def __init__(self):
@@ -63,34 +61,10 @@ async def on_message(message):
     global PlayerList #PlayerList is a dictionary not a list
     confused = True
 
-
-    #if message.content.startswith('d!test'):
-    #    print("about to do a thing")
-    #    await UserCommands.Help(message)
-    #    print("prossesing message {}".format(message.content))
-
-                
-    #if message.content.startswith("d!"):
     print("processing message {}".format(message.content))
-        #if message.content.startswith("d!new account"):
-        #    if message.author.id in PlayerList:
-        #        await client.send_message(message.channel, 'you\'re already in our data base')
-        #    else:
-        #        await UserCommands.NewAccount(message.author)
-        #elif message.author.id in PlayerList:
-        #    for i in coms.commands.keys():
-            
-        #        if ( message.content.startswith(i) ):
+
     if message.content.lower() in UserCommands.Commands:
         await UserCommands.Commands[message.content.lower()](message)    
-                    #await coms.commands[i](message)
-                    #confused = False
-                    #break
-
-            #if (confused == True):
-                #await client.send_message(message.channel, 'I didn\t understand for a list of commands use !help')
-        #else:
-            #await client.send_message(message.channel, 'looks like your not in our data base please use !new account and create an account to use this bot')
 
 import UserCommands
 
