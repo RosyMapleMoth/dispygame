@@ -2,10 +2,13 @@ import discord
 import asyncio
 import pickle
 import logging
+import json
 #import diBot
 # this file currently holds all user commands
 
 logging.basicConfig(level=logging.INFO)
+
+Commands = {}
 
 @asyncio.coroutine
 async def CreateAccount(message):
@@ -43,19 +46,23 @@ async def Help(message):
     print("inside helper")
     await GameError(message, "UnderConstruction")
 
+Commands["help"] = Help
+
 @asyncio.coroutine
-async def LoadAndSave(todo):
-    if (todo == "save"):
-        afile = open('PlayerData', 'wb')
-        json.dump(PlayerList, afile)
+async def LoadAndSave(message):
+    if (message.content == "save"):
+        afile = open('PlayerData', 'w')
+        json.dump(diBot.PlayerList, afile)
         afile.close()
-    elif(todo == "load"):
-        file2 = open('PlayerData', 'rb')
-        PlayerList = json.load(file2)
+    elif(message.content == "load"):
+        file2 = open('PlayerData', 'r')
+        diBot.PlayerList = json.load(file2)
         file2.close()
     else:
         print("unacceptable state input")
 
+Commands["load"] = LoadAndSave
+Commands["save"] = LoadAndSave
 
 @asyncio.coroutine
 async def offend(channel, user):
@@ -63,11 +70,15 @@ async def offend(channel, user):
     await diBot.client.send_message(channel, string)
 
 @asyncio.coroutine
-async def NewAccount(user):
-    string = "Thank you for joining the game, " + user.name
-    await diBot.client.send_message(user, string)
-    diBot.PlayerList[user.id] = user.name
+async def NewAccount(message):
+    if message.author.id in diBot.PlayerList:
+        string = "Thank you for joining the game, " + message.author.name
+        await diBot.client.send_message(message.author, string)
+        diBot.PlayerList[message.author.id] = message.author.name
+    else:
+        await diBot.client.send_message(message.author, "Fuck off, your already in this shit!")
     
+Commands["newaccount"] = NewAccount
 
 import diBot 
 
